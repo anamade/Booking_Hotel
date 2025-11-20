@@ -5,8 +5,8 @@ import { useClerk, useUser } from '@clerk/clerk-react';
 
 const BookIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block align-middle">
-    <path d="M19 21H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-    <path d="M19 7l-7 5 7 5V7z" />
+    <path d="M3 19.5A2.5 2.5 0 0 0 5.5 22H20" />
+    <path d="M3 4.5A2.5 2.5 0 0 1 5.5 2H20v20H5.5A2.5 2.5 0 0 1 3 19.5V4.5z" />
   </svg>
 );
 
@@ -42,36 +42,29 @@ const Navbar = () => {
     >
       {/* Logo */}
       <Link to="/">
-        <img src={assets.logo} alt="logo" className={`h-9 ${isScrolled ? 'invert opacity-80' : ''}`} />
+        <img src={assets.logo} alt="logo" className={`h-9 ${isScrolled && 'invert opacity-80'}`} />
       </Link>
 
       {/* Desktop Nav */}
       <div className="hidden md:flex items-center gap-4 lg:gap-8">
-        {navLinks.map((link, i) => {
-          const isActive = link.path === '/' ? location.pathname === '/' : location.pathname.startsWith(link.path);
-          return (
-            <Link key={i} to={link.path} className={`group flex flex-col gap-0.5 ${isScrolled ? 'text-gray-700' : 'text-white'} ${isActive ? 'font-semibold' : ''}`}>
-              {link.name}
-              <div className={`${isScrolled ? 'bg-gray-700' : 'bg-white'} h-0.5 w-0 group-hover:w-full transition-all duration-300`} />
-            </Link>
-          );
-        })}
-        <button onClick={() => navigate('/dashboard')} className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all`}>
-          Dashboard
-        </button>
+        {navLinks.map((link, i) => (
+          <Link key={i} to={link.path} className={`group flex flex-col gap-0.5 ${isScrolled ? 'text-gray-700' : 'text-white'}`}>
+            {link.name}
+            <div className={`${isScrolled ? 'bg-gray-700' : 'bg-white'} h-0.5 w-0 group-hover:w-full transition-all duration-300`} />
+          </Link>
+        ))}
+        <button className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all`}>Dashboard</button>
       </div>
 
       {/* Desktop Right */}
       <div className="hidden md:flex items-center gap-4">
         <img src={assets.searchIcon} alt="search" className={`h-7 transition-all duration-500 ${isScrolled ? 'invert' : ''}`} />
         {user ? (
-          <button onClick={() => navigate('/profile')} className={`px-4 py-2 rounded-full ml-4 transition-all duration-500 ${isScrolled ? 'text-white bg-black' : 'bg-white text-black'}`}>
-            {user.firstName || 'Profile'}
-          </button>
+          <UserButton className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled ? 'text-white bg-black' : 'bg-white text-black'}`}>{user.firstName || 'Profile'}</UserButton>
         ) : (
-          <button onClick={openSignIn} className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled ? 'text-white bg-black' : 'bg-white text-black'}`}>
+          <UserButton onClick={openSignIn} className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled ? 'text-white bg-black' : 'bg-white text-black'}`}>
             Login
-          </button>
+          </UserButton>
         )}
       </div>
 
@@ -96,14 +89,10 @@ const Navbar = () => {
           </Link>
         ))}
 
-        <button onClick={() => navigate('/dashboard')} className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all">
-          Dashboard
-        </button>
+        <button className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all">Dashboard</button>
 
         {user ? (
-          <button onClick={() => navigate('/profile')} className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500">
-            {user.firstName || 'Profile'}
-          </button>
+          <button className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500">{user.firstName || 'Profile'}</button>
         ) : (
           <button onClick={openSignIn} className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500">
             Login
